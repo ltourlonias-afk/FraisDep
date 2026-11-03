@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FraisDép">
+<meta name="theme-color" content="#000000">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>FraisDép</title>
+<style>
+:root{--bg:#000;--card:#1c1c1e;--card2:#2c2c2e;--card3:#3a3a3c;--text:#fff;--muted:#8e8e93;--blue:#0a84ff;--green:#30d158;--orange:#ff9f0a;--red:#ff453a;--purple:#bf5af2;
+--st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;font-size:17px}
+body{padding:calc(var(--st) + 8px) 16px calc(var(--sb) + 110px);max-width:640px;margin:0 auto;min-height:100vh}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+.top{display:flex;justify-content:space-between;align-items:center;height:52px}
+.circle,.pill{background:var(--card);border-radius:999px;height:48px;display:flex;align-items:center}
+.circle{width:48px;justify-content:center;font-size:24px}
+.pill{padding:0 6px}.pill button{width:44px;height:44px;font-size:20px}
+.hero{text-align:center;margin:8px 0 18px}
+.hero .flag{font-size:64px;line-height:1}
+.hero h1{font-size:30px;margin:10px 0 2px;font-weight:800}
+.hero .sub{color:var(--muted);font-size:15px}
+h1.big{font-size:34px;font-weight:800;margin:6px 0 18px}
+.tabs{display:flex;background:var(--card);border-radius:999px;padding:4px;margin-bottom:18px}
+.tabs button{flex:1;padding:10px 0;border-radius:999px;font-size:16px}
+.tabs button.on{background:var(--card3);font-weight:600}
+.totals{display:flex;justify-content:space-between;margin:0 6px 20px}
+.totals div{text-align:center;flex:1}
+.totals small{color:var(--muted);font-size:14px;display:block}
+.totals b{font-size:24px}
+.day{font-size:20px;font-weight:700;margin:22px 4px 10px}
+.row{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:22px;padding:14px 16px;margin-bottom:10px;width:100%;text-align:left}
+.ico{width:46px;height:46px;border-radius:12px;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:26px;flex:none}
+.row .mid{flex:1;min-width:0}
+.row .t{font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .s{color:var(--muted);font-size:14px;margin-top:2px}
+.row .amt{text-align:right;font-weight:700;font-size:18px;white-space:nowrap}
+.row .amt small{display:block;color:var(--muted);font-weight:400;font-size:13px}
+.tag{display:inline-block;font-size:12px;padding:2px 7px;border-radius:6px;font-weight:600;margin-right:4px}
+.tg-f{background:#0a84ff33;color:#64b5ff}.tg-s{background:#bf5af233;color:#d9a0ff}.tg-n{background:#ff9f0a33;color:#ffc266}.tg-ok{background:#30d15833;color:#6ee08c}
+.fab{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--sb) + 22px);width:64px;height:64px;border-radius:50%;background:var(--blue);font-size:38px;line-height:64px;text-align:center;box-shadow:0 6px 20px #0a84ff66;z-index:5}
+.empty{text-align:center;color:var(--muted);padding:40px 20px;line-height:1.5}
+.card{background:var(--card);border-radius:18px;padding:16px;margin-bottom:12px}
+.card h3{margin:0 0 10px;font-size:17px}
+.kv{display:flex;justify-content:space-between;padding:6px 0;font-size:15px;border-bottom:1px solid #ffffff10}
+.kv:last-child{border:0}.kv span{color:var(--muted)}
+.pos{color:var(--green)}.neg{color:var(--red)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;display:block}
+.grid figure{margin:0;position:relative}
+.grid figcaption{position:absolute;bottom:4px;left:4px;right:4px;font-size:11px;background:#000a;border-radius:6px;padding:2px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* sheet */
+.ov{position:fixed;inset:0;background:#000a;z-index:20;display:flex;align-items:flex-end;justify-content:center;animation:fd .2s}
+.sheet{background:#121214;width:100%;max-width:640px;max-height:94vh;overflow:auto;border-radius:22px 22px 0 0;padding:14px 16px calc(var(--sb) + 20px);animation:up .25s}
+@keyframes up{from{transform:translateY(40px);opacity:0}}@keyframes fd{from{opacity:0}}
+.sh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;position:sticky;top:-14px;background:#121214;padding:8px 0;z-index:2}
+.sh b{font-size:18px}.sh button{color:var(--blue);font-size:17px;padding:6px}
+.sh .ok{font-weight:700}
+label.l{display:block;color:var(--muted);font-size:13px;margin:14px 4px 6px;text-transform:uppercase;letter-spacing:.03em}
+input,select,textarea{width:100%;background:var(--card);color:var(--text);border:1px solid transparent;border-radius:12px;padding:13px 14px;font:inherit;font-size:17px;outline:none;-webkit-appearance:none;appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--blue)}
+input[type=date]{min-height:50px}
+textarea{min-height:70px;resize:vertical}
+.two{display:flex;gap:10px}.two>*{flex:1;min-width:0}
+.seg{display:flex;background:var(--card);border-radius:12px;padding:3px;gap:3px}
+.seg input{display:none}
+.seg label{flex:1;text-align:center;padding:10px 4px;border-radius:9px;font-size:15px;cursor:pointer}
+.seg input:checked+label{background:var(--card3);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips input{display:none}
+.chips label{background:var(--card);padding:9px 12px;border-radius:999px;font-size:15px;cursor:pointer;border:1px solid transparent}
+.chips input:checked+label{border-color:var(--blue);background:#0a84ff22}
+.amount{font-size:30px;font-weight:700;text-align:center}
+.hint{color:var(--muted);font-size:13px;margin:6px 4px 0}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.thumbs div{position:relative}
+.thumbs img{width:78px;height:78px;object-fit:cover;border-radius:10px;display:block}
+.thumbs button{position:absolute;top:-6px;right:-6px;background:var(--red);width:24px;height:24px;border-radius:50%;font-size:14px;line-height:24px}
+.btn{display:block;width:100%;background:var(--card);padding:14px;border-radius:14px;text-align:center;font-size:17px;margin-top:10px}
+.btn.p{background:var(--blue);font-weight:600}.btn.d{color:var(--red)}
+.menu .btn{text-align:left}
+.viewer{position:fixed;inset:0;background:#000;z-index:30;display:flex;align-items:center;justify-content:center}
+.viewer img{max-width:100%;max-height:100%}
+.viewer button{position:absolute;top:calc(var(--st) + 10px);right:16px;font-size:28px;background:var(--card);width:44px;height:44px;border-radius:50%}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--sb) + 100px);background:var(--card3);padding:10px 18px;border-radius:999px;z-index:40;font-size:15px;animation:fd .2s}
+.ver h3{margin:0}.ver ul{margin:8px 0 0;padding-left:20px;color:#ddd;font-size:15px;line-height:1.5}
+.warn{background:#ff9f0a22;color:#ffc266;border-radius:12px;padding:10px 12px;font-size:14px;margin-bottom:14px}
+.bar{height:8px;background:var(--card2);border-radius:4px;overflow:hidden;margin:8px 0 2px}
+.bar i{display:block;height:100%;background:var(--blue)}
+.foot{text-align:center;color:var(--muted);font-size:12px;margin-top:30px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="layer"></div>
+<script>
+'use strict';
+const APP_VERSION='0.1';
+const VERSIONS=[
+ {v:'0.1',date:'02/11/2026',items:[
+  'Création d’un déplacement : pays (drapeau), ville, devise, taux de change, dates',
+  'Forfaits par déplacement : repas / jour et nuitée, nombre de jours et de nuits calculé depuis les dates (modifiable)',
+  'Ajout d’une dépense : date, libellé, catégorie, mode Forfait / Frais réels',
+  'Frais réels : payé par la société ou avancé par moi (note de frais), suivi « remboursé »',
+  'Montant en euros ou en devise locale, conversion automatique',
+  'Photos de justificatifs (appareil photo ou photothèque), compressées',
+  'Onglets Dépenses / Bilan / Photos',
+  'Export CSV par déplacement (pour Excel / note de frais)',
+  'Sauvegarde / restauration JSON complète (photos incluses)',
+  'Fonctionne hors connexion une fois installée sur l’écran d’accueil'
+ ]}
+];
+
+/* ---------- Données de référence ---------- */
+const COUNTRIES=[['FR','France','EUR'],['PT','Portugal','EUR'],['ES','Espagne','EUR'],['IT','Italie','EUR'],['DE','Allemagne','EUR'],['BE','Belgique','EUR'],['NL','Pays-Bas','EUR'],['LU','Luxembourg','EUR'],['AT','Autriche','EUR'],['IE','Irlande','EUR'],['FI','Finlande','EUR'],['GR','Grèce','EUR'],['SK','Slovaquie','EUR'],['SI','Slovénie','EUR'],['EE','Estonie','EUR'],['LV','Lettonie','EUR'],['LT','Lituanie','EUR'],['HR','Croatie','EUR'],['BG','Bulgarie','EUR'],['MT','Malte','EUR'],['CY','Chypre','EUR'],
+['CH','Suisse','CHF'],['GB','Royaume-Uni','GBP'],['PL','Pologne','PLN'],['CZ','Tchéquie','CZK'],['HU','Hongrie','HUF'],['RO','Roumanie','RON'],['SE','Suède','SEK'],['NO','Norvège','NOK'],['DK','Danemark','DKK'],['IS','Islande','ISK'],['RS','Serbie','RSD'],['TR','Turquie','TRY'],['UA','Ukraine','UAH'],
+['MA','Maroc','MAD'],['TN','Tunisie','TND'],['DZ','Algérie','DZD'],['EG','Égypte','EGP'],['ZA','Afrique du Sud','ZAR'],['SN','Sénégal','XOF'],['CI','Côte d’Ivoire','XOF'],['CM','Cameroun','XAF'],['NG','Nigeria','NGN'],
+['US','États-Unis','USD'],['CA','Canada','CAD'],['MX','Mexique','MXN'],['BR','Brésil','BRL'],['AR','Argentine','ARS'],['CL','Chili','CLP'],['CO','Colombie','COP'],['PE','Pérou','PEN'],
+['CN','Chine','CNY'],['HK','Hong Kong','HKD'],['TW','Taïwan','TWD'],['JP','Japon','JPY'],['KR','Corée du Sud','KRW'],['IN','Inde','INR'],['TH','Thaïlande','THB'],['VN','Vietnam','VND'],['ID','Indonésie','IDR'],['MY','Malaisie','MYR'],['SG','Singapour','SGD'],['PH','Philippines','PHP'],
+['AE','Émirats arabes unis','AED'],['SA','Arabie saoudite','SAR'],['QA','Qatar','QAR'],['IL','Israël','ILS'],['AU','Australie','AUD'],['NZ','Nouvelle-Zélande','NZD']]
+ .sort((a,b)=>a[1].localeCompare(b[1],'fr'));
+const CURRENCIES=[...new Set(['EUR',...COUNTRIES.map(c=>c[2])])].sort();
+const CATS={repas:['🍽️','Repas','forfait'],hebergement:['🛏️','Hébergement','forfait'],transport:['✈️','Avion / train','reel'],taxi:['🚕','Taxi / VTC','reel'],location:['🚗','Location voiture','reel'],carburant:['⛽','Carburant','reel'],parking:['🅿️','Parking','reel'],peage:['🛣️','Péage','reel'],autre:['📎','Autre','reel']};
+const flag=c=>c?String.fromCodePoint(...[...c.toUpperCase()].map(x=>127397+x.charCodeAt())):'🌍';
+const countryName=c=>(COUNTRIES.find(x=>x[0]===c)||[,c||''])[1];
+
+/* ---------- Utilitaires ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const num=v=>{const n=parseFloat(String(v??'').replace(/\s/g,'').replace(',','.'));return isFinite(n)?n:0};
+const r2=n=>Math.round(n*100)/100;
+const money=(n,c='EUR')=>{try{return new Intl.NumberFormat('fr-FR',{style:'currency',currency:c}).format(n||0)}catch(e){return (n||0).toFixed(2)+' '+c}};
+const today=()=>new Date().toISOString().slice(0,10);
+const fdate=d=>d?new Date(d+'T12:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}):'';
+const fshort=d=>d?new Date(d+'T12:00').toLocaleDateString('fr-FR',{day:'numeric',month:'short'}):'';
+const dayDiff=(a,b)=>Math.round((new Date(b+'T12:00')-new Date(a+'T12:00'))/864e5);
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}
+
+/* ---------- Stockage IndexedDB ---------- */
+let db;const data={trips:[],expenses:[]};
+function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open('fraisdep',1);r.onupgradeneeded=()=>{const d=r.result;['trips','expenses','photos'].forEach(s=>{if(!d.objectStoreNames.contains(s))d.createObjectStore(s,{keyPath:'id'})})};r.onsuccess=()=>{db=r.result;res()};r.onerror=()=>rej(r.error)})}
+const p=r=>new Promise((res,rej)=>{r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
+const st=(n,m='readonly')=>db.transaction(n,m).objectStore(n);
+const dbAll=n=>p(st(n).getAll()),dbGet=(n,id)=>p(st(n).get(id)),dbPut=(n,o)=>p(st(n,'readwrite').put(o)),dbDel=(n,id)=>p(st(n,'readwrite').delete(id));
+async function load(){data.trips=await dbAll('trips');data.expenses=await dbAll('expenses')}
+
+/* ---------- Calculs ---------- */
+function tripDays(t){if(t.nbJours!==''&&t.nbJours!=null)return num(t.nbJours);return t.start&&t.end?Math.max(0,dayDiff(t.start,t.end)+1):0}
+function tripNights(t){if(t.nbNuits!==''&&t.nbNuits!=null)return num(t.nbNuits);return t.start&&t.end?Math.max(0,dayDiff(t.start,t.end)):0}
+function stats(t){
+ const ex=data.expenses.filter(e=>e.tripId===t.id);const s={n:ex.length,total:0,societe:0,ndf:0,ndfOk:0,fRepas:0,fNuit:0,fAutre:0,cats:{}};
+ ex.forEach(e=>{const a=e.amountEUR||0;s.total+=a;s.cats[e.category]=(s.cats[e.category]||0)+a;
+  if(e.mode==='forfait'){if(e.category==='repas')s.fRepas+=a;else if(e.category==='hebergement')s.fNuit+=a;else s.fAutre+=a}
+  else if(e.payment==='societe')s.societe+=a;else{s.ndf+=a;if(e.rembourse)s.ndfOk+=a}});
+ s.days=tripDays(t);s.nights=tripNights(t);s.allocRepas=s.days*num(t.forfaitRepas);s.allocNuit=s.nights*num(t.forfaitNuit);
+ s.alloc=s.allocRepas+s.allocNuit;s.fSpent=s.fRepas+s.fNuit+s.fAutre;s.fSolde=s.alloc-s.fSpent;s.ndfReste=s.ndf-s.ndfOk;
+ s.perso=s.fSpent+s.ndf; // ce que j'ai sorti de ma poche
+ return s}
+
+/* ---------- Navigation ---------- */
+let view={name:'home'};
+function go(v){view=v;render();window.scrollTo(0,0)}
+function render(){
+ const a=$('#app');
+ if(view.name==='home')a.innerHTML=homeHTML();
+ else if(view.name==='trip'){const t=data.trips.find(x=>x.id===view.id);if(!t)return go({name:'home'});a.innerHTML=tripHTML(t);if(view.tab==='photos')loadGrid(t)}
+ else if(view.name==='versions')a.innerHTML=versionsHTML();
+}
+
+/* ---------- Accueil ---------- */
+function homeHTML(){
+ const trips=[...data.trips].sort((a,b)=>(b.start||b.createdAt||'').localeCompare(a.start||a.createdAt||''));
+ const last=localStorage.getItem('fd_lastBackup');const old=data.trips.length&&(!last||Date.now()-+last>7*864e5);
+ return `<div class="top"><div></div><div class="pill"><button onclick="openMenu()" aria-label="Menu">•••</button></div></div>
+ <h1 class="big">Déplacements</h1>
+ ${old?`<div class="warn">💾 Pas de sauvegarde depuis ${last?Math.floor((Date.now()-+last)/864e5)+' jours':'le début'}. <u onclick="exportJSON()">Sauvegarder maintenant</u></div>`:''}
+ ${trips.length?trips.map(t=>{const s=stats(t);return `<button class="row" onclick="go({name:'trip',id:'${t.id}',tab:'dep'})">
+  <div class="ico">${flag(t.country)}</div><div class="mid"><div class="t">${esc(t.name)}</div><div class="s">${esc(t.city||countryName(t.country))}${t.start?' · '+fshort(t.start)+(t.end?' → '+fshort(t.end):''):''} · ${s.n} dépense${s.n>1?'s':''}</div></div>
+  <div class="amt">${money(s.total)}${s.ndfReste>0.004?`<small>${money(s.ndfReste)} à rembourser</small>`:''}</div></button>`}).join('')
+ :`<div class="empty">Aucun déplacement pour l’instant.<br>Touche <b>+</b> pour créer le premier.</div>`}
+ <div class="foot">FraisDép v${APP_VERSION} · données stockées sur cet appareil</div>
+ <button class="fab" onclick="tripForm()" aria-label="Nouveau déplacement">+</button>`}
+
+function openMenu(){sheet(`<div class="sh"><b>Menu</b><button onclick="closeSheet()">Fermer</button></div><div class="menu">
+ <button class="btn" onclick="exportJSON()">💾 Sauvegarder (JSON)</button>
+ <button class="btn" onclick="$('#impf').click()">📂 Restaurer une sauvegarde</button>
+ <input type="file" id="impf" accept=".json,application/json" style="display:none" onchange="importJSON(this.files[0])">
+ <button class="btn" onclick="closeSheet();go({name:'versions'})">🏷️ Versions</button>
+ <button class="btn" onclick="installHelp()">📱 Installer sur l’iPhone</button></div>
+ <p class="hint">La sauvegarde contient tous les déplacements, dépenses et photos. Sur iPhone, choisis « Enregistrer dans Fichiers » puis le dossier de ton choix (iCloud Drive, par exemple).</p>`)}
+function installHelp(){sheet(`<div class="sh"><b>Installer</b><button onclick="closeSheet()">Fermer</button></div>
+ <div class="card" style="line-height:1.55;font-size:15px">1. Ouvre cette page dans <b>Safari</b>.<br>2. Touche le bouton <b>Partager</b> (carré avec flèche).<br>3. Choisis <b>Sur l’écran d’accueil</b>, puis <b>Ajouter</b>.<br><br>L’app s’ouvre alors en plein écran et marche sans réseau. Les données restent sur l’iPhone : fais une sauvegarde JSON régulièrement.</div>`)}
+
+/* ---------- Versions ---------- */
+function versionsHTML(){return `<div class="top"><button class="circle" onclick="go({name:'home'})">‹</button><div></div></div>
+ <h1 class="big">Versions</h1>${VERSIONS.map(v=>`<div class="card ver"><h3>v${v.v} <span style="color:var(--muted);font-weight:400;font-size:14px">· ${v.date}</span></h3><ul>${v.items.map(i=>`<li>${esc(i)}</li>`).join('')}</ul></div>`).join('')}`}
+
+/* ---------- Déplacement ---------- */
+function tripHTML(t){
+ const s=stats(t);const tab=view.tab||'dep';
+ let body='';
+ if(tab==='dep'){
+  const ex=data.expenses.filter(e=>e.tripId===t.id).sort((a,b)=>(b.date||'').localeCompare(a.date||'')||(b.createdAt||'').localeCompare(a.createdAt||''));
+  const groups={};ex.forEach(e=>(groups[e.date]=groups[e.date]||[]).push(e));
+  body=`<div class="totals"><div><small>Total dépensé</small><b>${money(s.total)}</b></div><div><small>À me rembourser</small><b style="color:${s.ndfReste>0.004?'var(--orange)':'inherit'}">${money(s.ndfReste)}</b></div></div>`+
+  (ex.length?Object.keys(groups).map(d=>`<div class="day">${fdate(d)}</div>`+groups[d].map(rowHTML).join('')).join('')
+  :`<div class="empty">Aucune dépense.<br>Touche <b>+</b> pour en ajouter une.</div>`);
+ } else if(tab==='bilan') body=bilanHTML(t,s);
+ else body=`<div id="grid" class="grid"></div>`;
+ return `<div class="top"><button class="circle" onclick="go({name:'home'})" aria-label="Retour">‹</button><div class="pill"><button onclick="tripMenu('${t.id}')" aria-label="Options">•••</button></div></div>
+ <div class="hero"><div class="flag">${flag(t.country)}</div><h1>${esc(t.name)}</h1><div class="sub">${esc([t.city,countryName(t.country)].filter(Boolean).join(', '))}${t.currency&&t.currency!=='EUR'?' · '+t.currency+' (1 € = '+num(t.rate).toLocaleString('fr-FR')+')':''}</div></div>
+ <div class="tabs">${[['dep','Dépenses'],['bilan','Bilan'],['photos','Photos']].map(([k,l])=>`<button class="${tab===k?'on':''}" onclick="go({name:'trip',id:'${t.id}',tab:'${k}'})">${l}</button>`).join('')}</div>
+ ${body}<button class="fab" onclick="expenseForm('${t.id}')" aria-label="Ajouter une dépense">+</button>`}
+
+function rowHTML(e){
+ const c=CATS[e.category]||CATS.autre;
+ const tag=e.mode==='forfait'?'<span class="tag tg-f">Forfait</span>':e.payment==='societe'?'<span class="tag tg-s">Payé société</span>':e.rembourse?'<span class="tag tg-ok">Remboursé ✓</span>':'<span class="tag tg-n">Note de frais</span>';
+ return `<button class="row" onclick="expenseForm('${e.tripId}','${e.id}')"><div class="ico">${c[0]}</div>
+ <div class="mid"><div class="t">${esc(e.label||c[1])}</div><div class="s">${tag}${(e.photoIds||[]).length?' 📷':''}${e.notes?' 📝':''}</div></div>
+ <div class="amt">${money(e.amountEUR)}${e.currency!=='EUR'?`<small>${money(e.amount,e.currency)}</small>`:''}</div></button>`}
+
+function bilanHTML(t,s){
+ const pct=(a,b)=>b>0?Math.min(100,a/b*100):0;
+ const sol=v=>`<b class="${v>=0?'pos':'neg'}">${v>=0?'+':''}${money(v)}</b>`;
+ return `<div class="card"><h3>🧾 Forfait</h3>
+ <div class="kv"><span>Repas : ${s.days} jour${s.days>1?'s':''} × ${money(num(t.forfaitRepas))}</span><b>${money(s.allocRepas)}</b></div>
+ <div class="kv"><span>Nuitées : ${s.nights} × ${money(num(t.forfaitNuit))}</span><b>${money(s.allocNuit)}</b></div>
+ <div class="kv"><span>Total forfait alloué</span><b>${money(s.alloc)}</b></div>
+ <div class="kv"><span>Dépensé au forfait</span><b>${money(s.fSpent)}</b></div>
+ <div class="bar"><i style="width:${pct(s.fSpent,s.alloc)}%;background:${s.fSpent>s.alloc?'var(--red)':'var(--blue)'}"></i></div>
+ <div class="kv"><span>Solde forfait (alloué − dépensé)</span>${sol(s.fSolde)}</div>
+ ${s.alloc===0?'<p class="hint">Renseigne les montants de forfait et les dates dans « ••• → Modifier le déplacement ».</p>':''}</div>
+ <div class="card"><h3>💳 Frais réels</h3>
+ <div class="kv"><span>Payé directement par la société</span><b>${money(s.societe)}</b></div>
+ <div class="kv"><span>Avancé par moi (notes de frais)</span><b>${money(s.ndf)}</b></div>
+ <div class="kv"><span>Déjà remboursé</span><b class="pos">${money(s.ndfOk)}</b></div>
+ <div class="kv"><span>Reste à me rembourser</span><b style="color:${s.ndfReste>0.004?'var(--orange)':'inherit'}">${money(s.ndfReste)}</b></div></div>
+ <div class="card"><h3>📊 Par catégorie</h3>${Object.keys(CATS).filter(k=>s.cats[k]).map(k=>`<div class="kv"><span>${CATS[k][0]} ${CATS[k][1]}</span><b>${money(s.cats[k])}</b></div>`).join('')||'<p class="hint">Aucune dépense.</p>'}
+ <div class="kv"><span><b style="color:#fff">Total</b></span><b>${money(s.total)}</b></div></div>`}
+
+async function loadGrid(t){
+ const ex=data.expenses.filter(e=>e.tripId===t.id&&(e.photoIds||[]).length).sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+ const g=$('#grid');if(!g)return;
+ if(!ex.length){g.outerHTML='<div class="empty">Aucun justificatif photo.</div>';return}
+ let h='';for(const e of ex)for(const pid of e.photoIds){const ph=await dbGet('photos',pid);if(ph)h+=`<figure onclick="viewPhoto('${pid}')"><img src="${ph.data}" alt=""><figcaption>${fshort(e.date)} · ${esc(e.label||CATS[e.category]?.[1]||'')}</figcaption></figure>`}
+ g.innerHTML=h}
+async function viewPhoto(id){const ph=await dbGet('photos',id);if(!ph)return;const v=document.createElement('div');v.className='viewer';v.innerHTML=`<img src="${ph.data}"><button onclick="this.parentNode.remove()">×</button>`;document.body.appendChild(v)}
+
+function tripMenu(id){sheet(`<div class="sh"><b>Déplacement</b><button onclick="closeSheet()">Fermer</button></div><div class="menu">
+ <button class="btn" onclick="tripForm('${id}')">✏️ Modifier le déplacement</button>
+ <button class="btn" onclick="exportCSV('${id}')">📄 Exporter en CSV (Excel)</button>
+ <button class="btn d" onclick="deleteTrip('${id}')">🗑️ Supprimer le déplacement</button></div>`)}
+
+/* ---------- Feuilles modales ---------- */
+function sheet(html){$('#layer').innerHTML=`<div class="ov" onclick="if(event.target===this)closeSheet()"><div class="sheet">${html}</div></div>`}
+function closeSheet(){$('#layer').innerHTML=''}
+
+/* ---------- Formulaire déplacement ---------- */
+function tripForm(id){
+ const t=id?data.trips.find(x=>x.id===id):{country:'',city:'',currency:'EUR',rate:1,start:today(),end:'',forfaitRepas:'',forfaitNuit:'',nbJours:'',nbNuits:''};
+ sheet(`<div class="sh"><button onclick="closeSheet()">Annuler</button><b>${id?'Modifier':'Nouveau déplacement'}</b><button class="ok" onclick="saveTrip('${id||''}')">OK</button></div>
+ <label class="l">Pays</label><select id="t_country" onchange="onCountry()"><option value="">— Choisir —</option>${COUNTRIES.map(c=>`<option value="${c[0]}" ${t.country===c[0]?'selected':''}>${flag(c[0])} ${c[1]}</option>`).join('')}</select>
+ <label class="l">Ville</label><input id="t_city" value="${esc(t.city)}" placeholder="Porto" oninput="namePh()">
+ <label class="l">Nom du déplacement</label><input id="t_name" value="${esc(t.name||'')}" placeholder="Auto : ville + mois">
+ <div class="two"><div><label class="l">Début</label><input type="date" id="t_start" value="${t.start||''}" onchange="namePh();dayPh()"></div><div><label class="l">Fin</label><input type="date" id="t_end" value="${t.end||''}" onchange="dayPh()"></div></div>
+ <div class="two"><div><label class="l">Devise locale</label><select id="t_cur" onchange="onCur()">${CURRENCIES.map(c=>`<option ${t.currency===c?'selected':''}>${c}</option>`).join('')}</select></div>
+ <div id="rateBox"><label class="l">1 € = ? <span id="curLbl">${t.currency}</span></label><input id="t_rate" inputmode="decimal" value="${String(t.rate??1).replace('.',',')}"></div></div>
+ <div id="rateBtn"><button class="btn" onclick="fetchRate()">🌐 Récupérer le taux du jour</button><p class="hint">Taux BCE via frankfurter.app (connexion requise). Tu peux aussi saisir le taux de ta banque.</p></div>
+ <label class="l">Forfaits accordés par l’entreprise</label>
+ <div class="two"><div><input id="t_fr" inputmode="decimal" value="${esc(String(t.forfaitRepas??'').replace('.',','))}" placeholder="Repas €/jour"></div><div><input id="t_fn" inputmode="decimal" value="${esc(String(t.forfaitNuit??'').replace('.',','))}" placeholder="Nuitée €/nuit"></div></div>
+ <div class="two"><div><label class="l">Nb jours (repas)</label><input id="t_nj" inputmode="numeric" value="${esc(t.nbJours??'')}"></div><div><label class="l">Nb nuits</label><input id="t_nn" inputmode="numeric" value="${esc(t.nbNuits??'')}"></div></div>
+ <p class="hint">Laisse vide : calculé automatiquement depuis les dates.</p>`);
+ onCur(true);namePh();dayPh()}
+function onCountry(){const c=COUNTRIES.find(x=>x[0]===$('#t_country').value);if(c){$('#t_cur').value=c[2];onCur()}namePh()}
+function onCur(init){const c=$('#t_cur').value;$('#curLbl').textContent=c;const e=c==='EUR';$('#rateBox').style.display=e?'none':'';$('#rateBtn').style.display=e?'none':'';if(e)$('#t_rate').value='1';else if(!init)$('#t_rate').value=''}
+function autoName(){const city=$('#t_city').value.trim()||countryName($('#t_country').value);const d=$('#t_start').value;return (city+(d?' '+new Date(d+'T12:00').toLocaleDateString('fr-FR',{month:'long',year:'numeric'}):'')).trim()}
+function namePh(){$('#t_name').placeholder=autoName()||'Auto : ville + mois'}
+function dayPh(){const s=$('#t_start').value,e=$('#t_end').value;if(s&&e){const d=dayDiff(s,e);$('#t_nj').placeholder='auto : '+(d+1);$('#t_nn').placeholder='auto : '+Math.max(0,d)}else{$('#t_nj').placeholder='auto';$('#t_nn').placeholder='auto'}}
+async function fetchRate(){const c=$('#t_cur').value;toast('Recherche du taux…');
+ for(const u of[`https://api.frankfurter.dev/v1/latest?base=EUR&symbols=${c}`,`https://api.frankfurter.app/latest?from=EUR&to=${c}`]){
+  try{const r=await fetch(u);if(!r.ok)continue;const j=await r.json();if(j.rates&&j.rates[c]){$('#t_rate').value=String(j.rates[c]).replace('.',',');toast(`Taux du ${j.date} : 1 € = ${j.rates[c]} ${c}`);return}}catch(e){}}
+ toast('Taux indisponible pour '+c+' : saisis-le à la main')}
+async function saveTrip(id){
+ const o=id?{...data.trips.find(x=>x.id===id)}:{id:uid(),createdAt:new Date().toISOString()};
+ o.country=$('#t_country').value;o.city=$('#t_city').value.trim();o.name=$('#t_name').value.trim()||autoName()||'Déplacement';
+ o.start=$('#t_start').value;o.end=$('#t_end').value;o.currency=$('#t_cur').value;o.rate=o.currency==='EUR'?1:num($('#t_rate').value);
+ if(o.currency!=='EUR'&&!(o.rate>0)){toast('Indique le taux de change');return}
+ if(o.start&&o.end&&o.end<o.start){toast('La date de fin est avant le début');return}
+ o.forfaitRepas=num($('#t_fr').value);o.forfaitNuit=num($('#t_fn').value);
+ o.nbJours=$('#t_nj').value.trim()===''?'':num($('#t_nj').value);o.nbNuits=$('#t_nn').value.trim()===''?'':num($('#t_nn').value);
+ await dbPut('trips',o);const i=data.trips.findIndex(x=>x.id===o.id);if(i>=0)data.trips[i]=o;else data.trips.push(o);
+ closeSheet();go({name:'trip',id:o.id,tab:view.tab||'dep'})}
+async function deleteTrip(id){const t=data.trips.find(x=>x.id===id);const ex=data.expenses.filter(e=>e.tripId===id);
+ if(!confirm(`Supprimer « ${t.name} » et ses ${ex.length} dépense(s) ? Action définitive.`))return;
+ for(const e of ex){for(const pid of e.photoIds||[])await dbDel('photos',pid);await dbDel('expenses',e.id)}
+ await dbDel('trips',id);data.trips=data.trips.filter(x=>x.id!==id);data.expenses=data.expenses.filter(e=>e.tripId!==id);closeSheet();go({name:'home'})}
+
+/* ---------- Formulaire dépense ---------- */
+let F=null;
+async function expenseForm(tripId,id){
+ const t=data.trips.find(x=>x.id===tripId);
+ const e=id?data.expenses.find(x=>x.id===id):{date:(t.start&&today()<t.start)?t.start:(t.end&&today()>t.end?t.end:today()),label:'',category:'repas',mode:'forfait',payment:'perso',amount:'',currency:t.currency||'EUR',rate:t.rate||1,notes:'',rembourse:false,photoIds:[]};
+ F={tripId,id,trip:t,photos:[],removed:[],modeTouched:!!id};
+ for(const pid of e.photoIds||[]){const ph=await dbGet('photos',pid);if(ph)F.photos.push({id:pid,data:ph.data})}
+ const foreign=t.currency&&t.currency!=='EUR';
+ sheet(`<div class="sh"><button onclick="closeSheet()">Annuler</button><b>${id?'Modifier':'Nouvelle dépense'}</b><button class="ok" onclick="saveExpense()">OK</button></div>
+ <input id="e_amount" class="amount" inputmode="decimal" placeholder="0,00" value="${e.amount!==''?String(e.amount).replace('.',','):''}" oninput="conv()">
+ ${foreign?`<div class="seg" style="margin-top:10px"><input type="radio" name="cur" id="c1" value="${t.currency}" ${e.currency!=='EUR'?'checked':''} onchange="conv()"><label for="c1">${t.currency}</label><input type="radio" name="cur" id="c2" value="EUR" ${e.currency==='EUR'?'checked':''} onchange="conv()"><label for="c2">EUR €</label></div>
+ <div id="rateLine" class="hint" style="display:flex;align-items:center;gap:8px;justify-content:center">1 € = <input id="e_rate" inputmode="decimal" style="width:110px;padding:6px 10px;font-size:15px" value="${String(e.currency!=='EUR'?e.rate:t.rate).replace('.',',')}" oninput="conv()"> ${t.currency} <b id="eqv"></b></div>`:''}
+ <label class="l">Catégorie</label><div class="chips">${Object.entries(CATS).map(([k,c])=>`<input type="radio" name="cat" id="k_${k}" value="${k}" ${e.category===k?'checked':''} onchange="onCat()"><label for="k_${k}">${c[0]} ${c[1]}</label>`).join('')}</div>
+ <label class="l">Type de prise en charge</label><div class="seg"><input type="radio" name="mode" id="m1" value="forfait" ${e.mode==='forfait'?'checked':''} onchange="F.modeTouched=true;onMode()"><label for="m1">Forfait</label><input type="radio" name="mode" id="m2" value="reel" ${e.mode==='reel'?'checked':''} onchange="F.modeTouched=true;onMode()"><label for="m2">Frais réels</label></div>
+ <div id="payBox"><label class="l">Paiement</label><div class="seg"><input type="radio" name="pay" id="p1" value="societe" ${e.payment==='societe'?'checked':''} onchange="onMode()"><label for="p1">🏢 Société</label><input type="radio" name="pay" id="p2" value="perso" ${e.payment!=='societe'?'checked':''} onchange="onMode()"><label for="p2">👤 Moi (note de frais)</label></div>
+ <label id="rbBox" style="display:flex;align-items:center;gap:10px;margin:12px 4px 0;font-size:16px"><input type="checkbox" id="e_rb" ${e.rembourse?'checked':''} style="width:22px;height:22px;flex:none"> Déjà remboursé</label></div>
+ <p id="modeHint" class="hint"></p>
+ <div class="two"><div><label class="l">Date</label><input type="date" id="e_date" value="${e.date}"></div></div>
+ <label class="l">Libellé</label><input id="e_label" value="${esc(e.label)}" placeholder="${CATS[e.category][1]}">
+ <label class="l">Justificatifs</label><button class="btn" onclick="$('#e_file').click()">📷 Ajouter une photo</button>
+ <input type="file" id="e_file" accept="image/*" multiple style="display:none" onchange="addPhotos(this)"><div id="thumbs" class="thumbs"></div>
+ <label class="l">Notes</label><textarea id="e_notes" placeholder="Invités, n° de facture…">${esc(e.notes)}</textarea>
+ ${id?`<button class="btn d" style="margin-top:20px" onclick="deleteExpense('${id}')">🗑️ Supprimer la dépense</button>`:''}`);
+ onMode();conv();drawThumbs()}
+function onCat(){const k=document.querySelector('[name=cat]:checked').value;$('#e_label').placeholder=CATS[k][1];if(!F.modeTouched){document.getElementById(CATS[k][2]==='forfait'?'m1':'m2').checked=true;onMode()}}
+function onMode(){const m=document.querySelector('[name=mode]:checked').value,pay=document.querySelector('[name=pay]:checked').value;
+ $('#payBox').style.display=m==='reel'?'':'none';$('#rbBox').style.display=pay==='perso'?'flex':'none';
+ $('#modeHint').textContent=m==='forfait'?'Payé par toi, couvert par le forfait journalier : compté dans le solde forfait.':pay==='societe'?'Réglé directement par l’entreprise (carte société, réservation agence…) : rien à rembourser.':'Avancé par toi : à reporter sur la note de frais.'}
+function curSel(){const r=document.querySelector('[name=cur]:checked');return r?r.value:'EUR'}
+function conv(){const eq=$('#eqv');if(!eq)return;const c=curSel();$('#rateLine').style.visibility=c==='EUR'?'hidden':'visible';
+ const a=num($('#e_amount').value),r=num($('#e_rate').value);eq.textContent=c!=='EUR'&&r>0&&a?'≈ '+money(a/r):''}
+function drawThumbs(){$('#thumbs').innerHTML=F.photos.map((p,i)=>`<div><img src="${p.data}" onclick="viewTmp(${i})"><button onclick="rmPhoto(${i})">×</button></div>`).join('')}
+function viewTmp(i){const v=document.createElement('div');v.className='viewer';v.innerHTML=`<img src="${F.photos[i].data}"><button onclick="this.parentNode.remove()">×</button>`;document.body.appendChild(v)}
+function rmPhoto(i){const p=F.photos.splice(i,1)[0];if(p.id)F.removed.push(p.id);drawThumbs()}
+async function addPhotos(inp){for(const f of inp.files){try{F.photos.push({data:await compress(f)})}catch(e){toast('Image illisible')}}inp.value='';drawThumbs()}
+function compress(file,max=1600,q=0.72){return new Promise((res,rej)=>{const img=new Image();const u=URL.createObjectURL(file);
+ img.onload=()=>{let w=img.naturalWidth,h=img.naturalHeight;const k=Math.min(1,max/Math.max(w,h));w=Math.round(w*k);h=Math.round(h*k);
+  const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(u);res(c.toDataURL('image/jpeg',q))};
+ img.onerror=()=>{URL.revokeObjectURL(u);rej()};img.src=u})}
+async function saveExpense(){
+ const t=F.trip;const amount=num($('#e_amount').value);if(!(amount>0)){toast('Saisis un montant');return}
+ const cur=curSel();const rate=cur==='EUR'?1:num($('#e_rate').value);if(!(rate>0)){toast('Taux de change manquant');return}
+ const date=$('#e_date').value;if(!date){toast('Indique la date');return}
+ const o=F.id?{...data.expenses.find(x=>x.id===F.id)}:{id:uid(),tripId:F.tripId,createdAt:new Date().toISOString()};
+ o.date=date;o.category=document.querySelector('[name=cat]:checked').value;o.label=$('#e_label').value.trim();
+ o.mode=document.querySelector('[name=mode]:checked').value;o.payment=o.mode==='forfait'?'perso':document.querySelector('[name=pay]:checked').value;
+ o.rembourse=o.mode==='reel'&&o.payment==='perso'&&$('#e_rb').checked;
+ o.amount=amount;o.currency=cur;o.rate=rate;o.amountEUR=r2(amount/rate);o.notes=$('#e_notes').value.trim();
+ for(const pid of F.removed)await dbDel('photos',pid);
+ o.photoIds=[];for(const ph of F.photos){const pid=ph.id||uid();if(!ph.id)await dbPut('photos',{id:pid,data:ph.data});o.photoIds.push(pid)}
+ await dbPut('expenses',o);const i=data.expenses.findIndex(x=>x.id===o.id);if(i>=0)data.expenses[i]=o;else data.expenses.push(o);
+ closeSheet();render();toast(F.id?'Dépense modifiée':'Dépense ajoutée')}
+async function deleteExpense(id){if(!confirm('Supprimer cette dépense ?'))return;const e=data.expenses.find(x=>x.id===id);
+ for(const pid of e.photoIds||[])await dbDel('photos',pid);await dbDel('expenses',id);data.expenses=data.expenses.filter(x=>x.id!==id);closeSheet();render()}
+
+/* ---------- Exports ---------- */
+async function saveFile(name,blob,desc){
+ if(window.showSaveFilePicker){try{const h=await showSaveFilePicker({suggestedName:name,types:[{description:desc,accept:{[blob.type]:['.'+name.split('.').pop()]}}]});const w=await h.createWritable();await w.write(blob);await w.close();return true}catch(e){if(e.name==='AbortError')return false}}
+ const file=new File([blob],name,{type:blob.type});
+ if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:name});return true}catch(e){if(e.name==='AbortError')return false}}
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000);return true}
+async function exportJSON(){
+ const photos=await dbAll('photos');
+ const out={app:'FraisDep',version:APP_VERSION,exportedAt:new Date().toISOString(),trips:data.trips,expenses:data.expenses,photos};
+ const ok=await saveFile(`FraisDep_sauvegarde_${today()}.json`,new Blob([JSON.stringify(out)],{type:'application/json'}),'Sauvegarde FraisDép');
+ if(ok){localStorage.setItem('fd_lastBackup',Date.now());closeSheet();render();toast('Sauvegarde prête')}}
+async function importJSON(file){if(!file)return;
+ try{const j=JSON.parse(await file.text());if(j.app!=='FraisDep'||!Array.isArray(j.trips))throw 0;
+  if(!confirm(`Importer ${j.trips.length} déplacement(s) et ${j.expenses.length} dépense(s) (sauvegarde du ${new Date(j.exportedAt).toLocaleDateString('fr-FR')}) ?\nLes éléments existants avec le même identifiant seront remplacés, les autres conservés.`))return;
+  for(const t of j.trips)await dbPut('trips',t);for(const e of j.expenses||[])await dbPut('expenses',e);for(const p of j.photos||[])await dbPut('photos',p);
+  await load();closeSheet();go({name:'home'});toast('Sauvegarde restaurée')}catch(e){toast('Fichier invalide')}}
+function exportCSV(id){const t=data.trips.find(x=>x.id===id);const s=stats(t);
+ const f=n=>(+n||0).toFixed(2).replace('.',',');const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+ const rows=[['Date','Libellé','Catégorie','Prise en charge','Paiement','Remboursé','Montant','Devise','Taux (1€=)','Montant EUR','Photos','Notes']];
+ data.expenses.filter(e=>e.tripId===id).sort((a,b)=>a.date.localeCompare(b.date)).forEach(e=>rows.push([e.date,e.label||CATS[e.category][1],CATS[e.category][1],e.mode==='forfait'?'Forfait':'Frais réels',e.mode==='forfait'?'Moi':e.payment==='societe'?'Société':'Moi (note de frais)',e.mode==='reel'&&e.payment==='perso'?(e.rembourse?'Oui':'Non'):'',f(e.amount),e.currency,String(e.rate).replace('.',','),f(e.amountEUR),(e.photoIds||[]).length,e.notes]));
+ rows.push([]);rows.push(['Total',,,,,,,,,f(s.total)]);rows.push(['Forfait alloué',,,,,,,,,f(s.alloc)]);rows.push(['Dépensé au forfait',,,,,,,,,f(s.fSpent)]);rows.push(['Payé société',,,,,,,,,f(s.societe)]);rows.push(['Notes de frais',,,,,,,,,f(s.ndf)]);rows.push(['Reste à rembourser',,,,,,,,,f(s.ndfReste)]);
+ const csv='﻿'+rows.map(r=>r.map(q).join(';')).join('\r\n');
+ saveFile(`FraisDep_${t.name.replace(/[^\w\-]+/g,'_')}.csv`,new Blob([csv],{type:'text/csv'}),'CSV').then(ok=>ok&&closeSheet())}
+
+/* ---------- Démarrage ---------- */
+(async()=>{
+ try{await openDB();await load()}catch(e){$('#app').innerHTML='<div class="empty">Stockage indisponible sur ce navigateur (navigation privée ?).</div>';return}
+ try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+ render();
+ if('serviceWorker'in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+})();
+</script>
+</body>
+</html>
